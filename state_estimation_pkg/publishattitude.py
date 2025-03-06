@@ -18,7 +18,7 @@ class DroneAttitudeToPose(Node):
 
     def attitude_callback(self, msg: DroneAttitude):
         pose_msg = PoseStamped()
-        pose_msg.header.stamp = msg.header.stamp
+        pose_msg.header.stamp= self.get_clock().now().to_msg()
         pose_msg.header.frame_id = "imu_link"
         
         pose_msg.pose.position.x=6.0

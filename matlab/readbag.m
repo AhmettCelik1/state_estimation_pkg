@@ -3,7 +3,7 @@ clear;
 close all;
 
 % Define the path to the ROS 2 bag file
-bag_path = "/home/ahmet/workspace/ros2_ws/ros2_test_ws/croped_bag_euler_attitude/rosbag2_2025_03_06-18_27_56/rosbag2_2025_03_06-18_27_56_0.db3";
+bag_path = "/home/ahmet/workspace/ros2_ws/ros2_test_ws/euler_bag/rosbag2_2025_03_06-22_54_19/rosbag2_2025_03_06-22_54_19_0.db3";
 
 % Create a bag reader object
 bag_reader = ros2bagreader(bag_path);

@@ -13,10 +13,10 @@ def generate_launch_description():
             name='mahonyAHRS'
         )
     
-    publish_pose = Node(
+    publishattitude = Node(
             package='state_estimation_pkg',
-            executable='publish_pose',
-            name='publish_pose'
+            executable='publishattitude',
+            name='publishattitude'
         )
     
 
@@ -25,6 +25,6 @@ def generate_launch_description():
             [
                 comp_filter_node,
                 mahony_ahrs_node,
-                publish_pose,
+                publishattitude,
             ]
         )

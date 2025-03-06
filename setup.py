@@ -26,7 +26,7 @@ setup(
         'console_scripts': [
             "comp_filter = state_estimation_pkg.quaternion_complementary_filter:main",
             "mahony_ahrs = state_estimation_pkg.mahonyAHRS:main",
-            "publish_pose = state_estimation_pkg.publish_pose:main",
+            "publishattitude = state_estimation_pkg.publishattitude:main",
             "quat2euler = state_estimation_pkg.quat2euler:main",
         ],
     },

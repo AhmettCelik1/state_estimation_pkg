@@ -226,7 +226,7 @@ class ComplementaryFilter(Node):
       
         euler = euler_from_quaternion(quaternion)
         roll, pitch, yaw = euler
-        self.get_logger().info(f"Updated Euler Angles: yaw: {yaw*(180/np.pi):.4f}, pitch: {pitch*(180/np.pi):.4f}, roll: {roll*(180/np.pi):.4f}")
+        # self.get_logger().info(f"Updated Euler Angles: yaw: {yaw*(180/np.pi):.4f}, pitch: {pitch*(180/np.pi):.4f}, roll: {roll*(180/np.pi):.4f}")
 
         self.pose_pub.publish(pose_msg)
 
