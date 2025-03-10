@@ -2,13 +2,17 @@ clc;
 clear;
 close all;
 
-% Define the path to the ROS 2 bag file
-bag_path = "/home/ahmet/workspace/ros2_ws/ros2_test_ws/euler_bag/rosbag2_2025_03_06-22_54_19/rosbag2_2025_03_06-22_54_19_0.db3";
+currentDir = pwd;
+plotDir = fullfile(currentDir, 'plot');
+save_directory = plotDir;
+if ~exist(save_directory, 'dir')
+    mkdir(save_directory);
+end   
 
-% Create a bag reader object
+bag_path = "/home/ahmet/workspace/ros2_ws/ros2_test_ws/euler_bag/my_bag/my_bag_0.db3";
+
 bag_reader = ros2bagreader(bag_path);
 
-% Define the topics to read from
 topics = {
     "/imu/mahony_ahrs/pose_euler",
     "/imu/tools/com_non_adaptive/pose_euler",
@@ -17,7 +21,6 @@ topics = {
     "/imu/ground_truth_euler"
 };
 
-% Define the legend names for plotting
 legend_name = {
     "imu-mahony-ahrs",
     "imu-tools-com-non-adaptive",
@@ -26,7 +29,6 @@ legend_name = {
     "imu-ground-truth"
 };
 
-% Initialize arrays to store the roll, pitch, yaw values, and timestamps
 mahony_ahrs_roll = [];
 mahony_ahrs_pitch = [];
 mahony_ahrs_yaw = [];
@@ -52,15 +54,11 @@ imu_ground_truth_pitch = [];
 imu_ground_truth_yaw = [];
 imu_ground_truth_time = [];
 
-% Loop through each topic and extract the messages
 for i = 1:length(topics)
-    % Select the topic
     topic = topics{i};
     
-    % Read the messages from the topic
     msgs = readMessages(select(bag_reader, 'Topic', topic));
     
-    % Extract roll, pitch, yaw, and timestamps from each message
     for j = 1:length(msgs)
         msg = msgs{j};
         roll = msg.vector.x;
@@ -68,7 +66,6 @@ for i = 1:length(topics)
         yaw = msg.vector.z;
         time = double(msg.header.stamp.sec) + double(msg.header.stamp.nanosec) * 1e-9;
         
-        % Store the values in the appropriate arrays
         switch topic
             case "/imu/mahony_ahrs/pose_euler"
                 mahony_ahrs_roll = [mahony_ahrs_roll; roll];
@@ -99,8 +96,8 @@ for i = 1:length(topics)
     end
 end
 
-% Plot the roll, pitch, and yaw values in separate figures with respect to timestamps
-figure('Position', [0, 0, 1920, 1080]); % Set figure size to 1920x1080
+% Plot Roll
+figure('Position', [0, 0, 1920, 1080]); 
 plot(mahony_ahrs_time, mahony_ahrs_roll, 'LineWidth', 2, 'DisplayName', legend_name{1});
 hold on;
 plot(imu_tools_com_non_adaptive_time, imu_tools_com_non_adaptive_roll, 'LineWidth', 2, 'DisplayName', legend_name{2});
@@ -112,9 +109,13 @@ xlabel('Time (seconds)');
 ylabel('Angle (degree)');
 legend;
 grid on;
-set(gca, 'FontSize', 12); % Increase font size for better readability
+set(gca, 'FontSize', 12); 
 
-figure('Position', [0, 0, 1920, 1080]); % Set figure size to 1920x1080
+% Save Roll plot
+saveas(gcf, fullfile(save_directory, 'roll_comparison.jpg'));
+
+% Plot Pitch
+figure('Position', [0, 0, 1920, 1080]); 
 plot(mahony_ahrs_time, mahony_ahrs_pitch, 'LineWidth', 2, 'DisplayName', legend_name{1});
 hold on;
 plot(imu_tools_com_non_adaptive_time, imu_tools_com_non_adaptive_pitch, 'LineWidth', 2, 'DisplayName', legend_name{2});
@@ -126,9 +127,13 @@ xlabel('Time (seconds)');
 ylabel('Angle (degree)');
 legend;
 grid on;
-set(gca, 'FontSize', 12); % Increase font size for better readability
+set(gca, 'FontSize', 12); 
 
-figure('Position', [0, 0, 1920, 1080]); % Set figure size to 1920x1080
+% Save Pitch plot
+saveas(gcf, fullfile(save_directory, 'pitch_comparison.jpg'));
+
+% Plot Yaw
+figure('Position', [0, 0, 1920, 1080]); 
 plot(mahony_ahrs_time, mahony_ahrs_yaw, 'LineWidth', 2, 'DisplayName', legend_name{1});
 hold on;
 plot(imu_tools_com_non_adaptive_time, imu_tools_com_non_adaptive_yaw, 'LineWidth', 2, 'DisplayName', legend_name{2});
@@ -140,15 +145,16 @@ xlabel('Time (seconds)');
 ylabel('Angle (degree)');
 legend;
 grid on;
-set(gca, 'FontSize', 12); % Increase font size for better readability
+set(gca, 'FontSize', 12); 
 
-% Loop through each topic and create a figure with 3 subplots
+% Save Yaw plot
+saveas(gcf, fullfile(save_directory, 'yaw_comparison.jpg'));
+
+% Plot individual comparisons with ground truth
 for i = 1:length(topics)
-    % Create a new figure for each topic
-    figure('Position', [0, 0, 1920, 1080]); % Set figure size to 1920x1080
-    sgtitle(['Comparison of ', legend_name{i}, ' with Ground Truth'], 'FontSize', 14); % Set a title for the entire figure
+    figure('Position', [0, 0, 1920, 1080]); 
+    sgtitle(['Comparison of ', legend_name{i}, ' with Ground Truth'], 'FontSize', 14); 
     
-    % Extract the topic's roll, pitch, yaw data, and timestamps
     switch topics{i}
         case "/imu/mahony_ahrs/pose_euler"
             topic_roll = mahony_ahrs_roll;
@@ -171,10 +177,9 @@ for i = 1:length(topics)
             topic_yaw = imu_tools_madwick_yaw;
             topic_time = imu_tools_madwick_time;
         case "/imu/ground_truth_euler"
-            continue; % Skip ground truth, as it is the reference
+            continue; 
     end
     
-    % Subplot 1: Roll comparison
     subplot(3, 1, 1);
     plot(topic_time, topic_roll, 'LineWidth', 2, 'DisplayName', legend_name{i});
     hold on;
@@ -185,7 +190,6 @@ for i = 1:length(topics)
     legend;
     grid on;
     
-    % Subplot 2: Pitch comparison
     subplot(3, 1, 2);
     plot(topic_time, topic_pitch, 'LineWidth', 2, 'DisplayName', legend_name{i});
     hold on;
@@ -196,7 +200,6 @@ for i = 1:length(topics)
     legend;
     grid on;
     
-    % Subplot 3: Yaw comparison
     subplot(3, 1, 3);
     plot(topic_time, topic_yaw, 'LineWidth', 2, 'DisplayName', legend_name{i});
     hold on;
@@ -206,4 +209,7 @@ for i = 1:length(topics)
     ylabel('Angle (degree)', 'FontSize', 12);
     legend;
     grid on;
+
+    % Save individual comparison plot
+    saveas(gcf, fullfile(save_directory, [num2str(i), 'comparison.jpg']));
 end

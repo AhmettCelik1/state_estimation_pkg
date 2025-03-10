@@ -41,7 +41,11 @@ def generate_launch_description():
         )
      
     
-   
+    publishimu = Node(
+            package='state_estimation_pkg',
+            executable='publishimu',
+            name='publishimu'
+        )
 
         
     return LaunchDescription(
@@ -52,5 +56,6 @@ def generate_launch_description():
                 imu_tools_com_adaptive_pose,
                 imu_tools_madwick_pose,
                 imu_ground_truth,
+                # publishimu
             ]
         )

@@ -15,7 +15,7 @@ class IMUPoseEstimator(Node):
         self.q_w, self.q_x, self.q_y, self.q_z = 1.0, 0.0, 0.0, 0.0
 
         # Mahony filter gains
-        self.Kp = 0.25  
+        self.Kp = 0.00  
         self.Ki = 0.00
         self.integralFBx = 0.0
         self.integralFBy = 0.0

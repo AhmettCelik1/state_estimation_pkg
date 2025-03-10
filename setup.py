@@ -28,6 +28,8 @@ setup(
             "mahony_ahrs = state_estimation_pkg.mahonyAHRS:main",
             "publishattitude = state_estimation_pkg.publishattitude:main",
             "quat2euler = state_estimation_pkg.quat2euler:main",
+            "publishimu = state_estimation_pkg.publishimu:main",
+
         ],
     },
 )

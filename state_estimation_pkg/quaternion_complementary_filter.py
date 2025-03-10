@@ -16,7 +16,7 @@ class ComplementaryFilter(Node):
         self.q0, self.q1, self.q2, self.q3 = 1.0, 0.0, 0.0, 0.0
         self.wx_bias, self.wy_bias, self.wz_bias = 0.0, 0.0, 0.0
         self.wx_prev, self.wy_prev, self.wz_prev = 0.0, 0.0, 0.0
-        self.gain_acc = 0.01
+        self.gain_acc = 0.00
         self.bias_alpha = 0.01
         self.kGravity = 9.81
         self.kAccelerationThreshold = 0.1
